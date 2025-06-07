@@ -4,9 +4,6 @@ on:
   push:
     tags:
       - "v*" # Trigger on tags that start with 'v'
-  schedule:
-    - cron: '0 0 * * 0' # Every Sunday at midnight UTC
-
 jobs:
   frontend:
     runs-on: ubuntu-latest

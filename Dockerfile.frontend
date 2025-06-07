@@ -1,0 +1,15 @@
+FROM node:24-alpine as builder
+
+WORKDIR /app
+
+RUN apk add --no-cache git && \
+    git clone https://github.com/Comfy-Org/ComfyUI_frontend.git . && \
+    npm install && \
+    NODE_OPTIONS="--max-old-space-size=4096" npm run build
+
+# Note: To access the application, you need to map the port when running the container:
+# docker run -p 5173:5173 <image-name>
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"]

@@ -5,6 +5,12 @@ inputs:
   image-base-name:
     description: "Base name for the Docker image (e.g., a13labs/comfyui-frontend)"
     required: true
+  flavour_prefix:
+    description: "Prefix for the image tags (e.g., frontend, backend)"
+    required: false
+  flavour_suffix:
+    description: "Prefix for the image tags (e.g., frontend, backend)"
+    required: false
   dockerfile-path:
     description: "Path to the Dockerfile (e.g., Dockerfile.frontend)"
     required: true
@@ -40,6 +46,10 @@ runs:
       uses: docker/metadata-action@v5
       with:
         images: ${{ inputs.image-base-name }}
+        flavor: |
+          latest=auto
+          prefix= ${{ inputs.flavour_prefix }}
+          suffix= ${{ inputs.flavour_suffix }}
         tags: |
           type=schedule
           type=ref,event=tag

@@ -1,0 +1,27 @@
+FROM node:24-alpine
+
+RUN apk add --no-cache git 
+
+# Upstream Node.js image uses Alpine Linux which already have a user named 'node'.
+ARG UID=1000
+ARG GID=1000
+
+RUN mkdir -p /app && \
+    chown -R node:node /app
+
+USER node
+
+WORKDIR /app
+
+RUN git clone https://github.com/Comfy-Org/ComfyUI_frontend.git . && \
+    npm install && \
+    NODE_OPTIONS="--max-old-space-size=4096" npm run build && \
+    rm -rf /home/node/.npm && \
+    rm -rf /home/node/.cache/*
+
+# Note: To access the application, you need to map the port when running the container:
+# docker run -p 5173:5173 <image-name>
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"]

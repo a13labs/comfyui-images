@@ -15,8 +15,9 @@ jobs:
         uses: ./.github/actions/docker-build-push-trivy
         with:
           image-base-name: 'a13labs/comfyui'
-          dockerfile-path: 'Dockerfile.comfyui'
-          push-image: true 
+          flavour_prefix: 'frontend' # Prefix for frontend images
+          dockerfile-path: 'Dockerfile.frontend'
+          push-image: true # For frontend, we only build and scan
           run-trivy-scan: true
           dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
           dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -30,8 +31,9 @@ jobs:
       - name: Docker Build, Push, and Scan
         uses: ./.github/actions/docker-build-push-trivy
         with:
-          image-base-name: 'a13labs/trellis'
-          dockerfile-path: 'Dockerfile.trellis'
+          image-base-name: 'a13labs/comfyui'
+          flavour_prefix: 'backend' # Prefix for backend images
+          dockerfile-path: 'Dockerfile.backend'
           push-image: true # For backend, we build, push and scan
           run-trivy-scan: false # Assuming no scan for backend, adjust if needed
           dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
